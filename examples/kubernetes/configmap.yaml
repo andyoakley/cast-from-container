@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chromecast-office1
+data:
+  script.py: |
+    import time
+
+    def run(browser):
+      while True:
+        browser.get('https://www.bing.com/')
+        time.sleep(5*60)

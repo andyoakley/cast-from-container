@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chromecast-office1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chromecast-office1
+  template:
+    metadata:
+      labels:
+        app: chromecast-office1
+    spec:
+      containers:
+        - name: advertiser
+          image: andyo/docker-chromecast-advertiser:latest
+          env:
+          - name: CHROMECAST_HOSTNAME
+            value: Chromecast
+          livenessProbe:
+            exec:
+              command:
+              - python
+              - /app/healthcheck.py
+            timeoutSeconds: 2
+            periodSeconds: 60
+        - name: renderer
+          image: andyo/docker-chromecast-render:latest
+          volumeMounts:
+          - name: config
+            subPath: script.py
+            mountPath: /app/script.py
+
+      volumes:
+      - name: config
+        configMap:
+            name: chromecast-office1

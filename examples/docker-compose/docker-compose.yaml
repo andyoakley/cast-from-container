@@ -1,0 +1,19 @@
+version: "2"
+
+services:
+   render:
+     build: ../../render
+     restart: always
+     volumes:
+        - ./script.py:/app/script.py
+     security_opt:
+        - seccomp=../../render/seccomp.json
+
+   advertiser:
+     build: ../../advertiser
+     restart: always
+     volumes:
+       - ../../advertiser:/host
+     environment:
+       - CHROMECAST_HOSTNAME=Chromecast
+
